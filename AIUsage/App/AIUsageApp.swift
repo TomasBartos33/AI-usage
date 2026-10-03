@@ -7,6 +7,8 @@ struct AIUsageApp: App {
     @State private var store: UsageStore
 
     init() {
+        // Writing to a pipe of a subprocess that already exited must not kill the app.
+        signal(SIGPIPE, SIG_IGN)
         let preferences = Preferences()
         let store = UsageStore(preferences: preferences)
         _preferences = State(initialValue: preferences)

@@ -65,8 +65,11 @@ final class UsageStore {
 
         for (id, provider) in providers {
             let dirs = provider.watchedDirectories
-            if !dirs.isEmpty, let watcher = DirectoryWatcher(paths: dirs, handler: { [weak self] _ in
-                Task { @MainActor in self?.refresh(id, trigger: .fileChange) }
+            if !dirs.isEmpty, let watcher = DirectoryWatcher(paths: dirs, handler: { [weak self] paths in
+                Task { @MainActor in
+                    await provider.noteChangedPaths(paths)
+                    self?.refresh(id, trigger: .fileChange)
+                }
             }) {
                 directoryWatchers.append(watcher)
             }

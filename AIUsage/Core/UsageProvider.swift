@@ -40,9 +40,13 @@ protocol UsageProvider: Actor {
     /// restored from disk) so providers can keep last-known values when a source
     /// has nothing new.
     func refresh(trigger: RefreshTrigger, previous: UsageSnapshot?) async -> UsageSnapshot
+
+    /// Called with the paths reported by the directory watcher before a `.fileChange` refresh.
+    func noteChangedPaths(_ paths: [String]) async
 }
 
 extension UsageProvider {
     nonisolated var watchedDirectories: [URL] { [] }
     nonisolated var watchedFiles: [URL] { [] }
+    func noteChangedPaths(_ paths: [String]) async {}
 }

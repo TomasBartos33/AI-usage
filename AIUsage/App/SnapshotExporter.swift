@@ -16,7 +16,7 @@ enum SnapshotExporter {
     static func exportWhenReady(store: UsageStore, to directory: URL) {
         Task { @MainActor in
             // Give providers a moment to deliver their first snapshots.
-            for _ in 0..<40 where store.snapshots.count < store.orderedProviderIDs.count || !store.refreshing.isEmpty {
+            for _ in 0..<40 where store.snapshots.count < store.orderedProviderIDs.filter({ store.provider($0) != nil }).count || !store.refreshing.isEmpty {
                 try? await Task.sleep(for: .milliseconds(250))
             }
             try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
