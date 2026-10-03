@@ -24,7 +24,13 @@ actor ClaudeProvider: UsageProvider {
     nonisolated var watchedDirectories: [URL] { [ClaudePaths.projectsDirectory] }
     nonisolated let watchedFiles: [URL]
 
-    init(watchBridge: Bool) {
+    private let liveUsage: Bool
+    private var lastLiveQuery: Date?
+    private var lastLive: (windows: [UsageWindow], observedAt: Date)?
+    private var liveError: String?
+
+    init(watchBridge: Bool, liveUsage: Bool) {
+        self.liveUsage = liveUsage
         // The bridge snapshot is only watched when the bridge is installed, to
         // avoid waiting on a file that will never appear.
         watchedFiles = [ClaudePaths.globalStateFile] + (watchBridge ? [ClaudePaths.bridgeSnapshotFile] : [])
@@ -60,8 +66,23 @@ actor ClaudeProvider: UsageProvider {
             transcript.update(from: file)
         }
 
+        // 4. Optional live query of Anthropic's usage endpoint (metadata only, throttled).
+        if liveUsage, account != .noOAuthAccount, shouldQueryLive(trigger: trigger, now: now) {
+            lastLiveQuery = now
+            do {
+                let windows = try await ClaudeUsageAPI().fetchWindows()
+                if !windows.isEmpty { lastLive = (windows, Date()) }
+                liveError = nil
+            } catch {
+                liveError = error.localizedDescription
+            }
+        }
+
         // Rate limits: newest observation wins, falling back to the last known value.
         var candidates: [(windows: [UsageWindow], observedAt: Date, source: DataSource)] = []
+        if let lastLive {
+            candidates.append((lastLive.windows, lastLive.observedAt, .claudeUsageAPI))
+        }
         if let cache, !cache.windows.isEmpty {
             candidates.append((cache.windows, cache.fetchedAt ?? modificationDate(ClaudePaths.globalStateFile) ?? now, .claudeUsageCache))
         }
@@ -115,10 +136,25 @@ actor ClaudeProvider: UsageProvider {
                 snapshot.note = "Claude Code reports usage limits only for Claude Pro/Max sign-in."
             }
         }
+        if let liveError, snapshot.note == nil {
+            snapshot.note = liveError
+        }
         if snapshot.windows.isEmpty && snapshot.session == nil {
             snapshot.status = account == .noOAuthAccount && globalState != nil ? .notAuthenticated : .noData
         }
         return snapshot
+    }
+
+    /// Same cadence as Codex: launch, timer, reset, manual; menu opens at most every 2 minutes.
+    private func shouldQueryLive(trigger: RefreshTrigger, now: Date) -> Bool {
+        guard trigger.allowsMetadataQuery else { return false }
+        guard let lastLiveQuery else { return true }
+        let elapsed = now.timeIntervalSince(lastLiveQuery)
+        switch trigger {
+        case .menuOpened: return elapsed >= 120
+        case .manual: return elapsed >= 10
+        default: return elapsed >= 30
+        }
     }
 
     private func latestTranscript(trigger: RefreshTrigger) -> URL? {

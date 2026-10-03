@@ -16,6 +16,7 @@ final class Preferences {
         static let separator = "menuBarSeparator"
         static let codexExecutablePath = "codexExecutablePath"
         static let demoMode = "demoMode"
+        static let claudeLiveUsage = "claudeLiveUsage"
         static let schemaVersion = "preferencesVersion"
     }
 
@@ -54,6 +55,12 @@ final class Preferences {
     /// Optional override for the `codex` binary location.
     var codexExecutablePath: String {
         didSet { defaults.set(codexExecutablePath, forKey: Key.codexExecutablePath) }
+    }
+
+    /// Ask Anthropic's usage endpoint (the one behind Claude Code's `/usage`)
+    /// for current Claude limits, reusing Claude Code's sign-in. No tokens used.
+    var claudeLiveUsage: Bool {
+        didSet { defaults.set(claudeLiveUsage, forKey: Key.claudeLiveUsage) }
     }
 
     /// Replaces real providers with deterministic demo data (UI development, screenshots).
@@ -96,6 +103,7 @@ final class Preferences {
         staleAfterMinutes = stale > 0 ? stale : 30
         separator = defaults.string(forKey: Key.separator) ?? "  "
         codexExecutablePath = defaults.string(forKey: Key.codexExecutablePath) ?? ""
+        claudeLiveUsage = defaults.object(forKey: Key.claudeLiveUsage) as? Bool ?? true
         demoMode = defaults.bool(forKey: Key.demoMode)
             || ProcessInfo.processInfo.arguments.contains("--demo")
 

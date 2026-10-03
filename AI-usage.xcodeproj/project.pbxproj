@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		05A1C5295519B989703FEBA8 /* CodexAppServerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED0B79D41CDD9242EA892522 /* CodexAppServerClient.swift */; };
 		10376910EB489550773D832B /* UsageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902A9C16DF5784C352C079DE /* UsageStore.swift */; };
+		12E06FE61039289A28C4B4AC /* ClaudeUsageAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9445730E5798A4D976AEC357 /* ClaudeUsageAPI.swift */; };
 		1601EA99C8B609E8578BE5F1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A9072D663138EDD0CEA010 /* SettingsView.swift */; };
 		195AA53EADB2808D6246777E /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016FC001BA7B563AC0E5D9C7 /* GeneralSettingsView.swift */; };
 		1FA5439D4BE5B61F4EA0B9EE /* ClaudeStatusLineBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43483C062AA0FAA59ABE9BF0 /* ClaudeStatusLineBridge.swift */; };
@@ -82,6 +83,7 @@
 		7917065A8AF550BA9B9265CE /* UsagePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsagePanel.swift; sourceTree = "<group>"; };
 		8B0DD89BEF91682633EC687A /* UsageModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageModelTests.swift; sourceTree = "<group>"; };
 		902A9C16DF5784C352C079DE /* UsageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageStore.swift; sourceTree = "<group>"; };
+		9445730E5798A4D976AEC357 /* ClaudeUsageAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeUsageAPI.swift; sourceTree = "<group>"; };
 		A274DC2C593610137DE12398 /* UsageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageProvider.swift; sourceTree = "<group>"; };
 		A40F20AFA2A3B35FCFC0C2C6 /* ProvidersSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidersSettingsView.swift; sourceTree = "<group>"; };
 		A8961C5967DBE4D18EBFFF6F /* DisplaySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySettings.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 				66E9D7BD5B6725E91EF4955C /* ClaudePaths.swift */,
 				2833ECF7FF110A7CCBE594BA /* ClaudeProvider.swift */,
 				43483C062AA0FAA59ABE9BF0 /* ClaudeStatusLineBridge.swift */,
+				9445730E5798A4D976AEC357 /* ClaudeUsageAPI.swift */,
 			);
 			path = Claude;
 			sourceTree = "<group>";
@@ -335,6 +338,7 @@
 				D80696BEDE136247040AE7BF /* ClaudePaths.swift in Sources */,
 				C52F2D3E4C814CB146CE3CE1 /* ClaudeProvider.swift in Sources */,
 				1FA5439D4BE5B61F4EA0B9EE /* ClaudeStatusLineBridge.swift in Sources */,
+				12E06FE61039289A28C4B4AC /* ClaudeUsageAPI.swift in Sources */,
 				05A1C5295519B989703FEBA8 /* CodexAppServerClient.swift in Sources */,
 				F094DDDF9C33CA605D24C7C7 /* CodexLocator.swift in Sources */,
 				A018E46866C90BB1F750FF8D /* CodexParsers.swift in Sources */,

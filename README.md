@@ -32,7 +32,7 @@ What is actually implemented today:
 
 | Metric | Codex | Claude Code |
 |---|---|---|
-| 5 hour usage | ✅ app-server / session log | ✅ usage cache / status line |
+| 5 hour usage | ✅ app-server / session log | ✅ usage API / usage cache / status line |
 | Weekly usage | ✅ | ✅ |
 | Other limits | ✅ extra buckets reported by the account (e.g. `gpt-reserve`) | ✅ per-model weekly limits (Opus/Sonnet) when present; spend limit via status line |
 | Reset time | ✅ | ✅ |
@@ -60,6 +60,8 @@ The most recent observation from either source wins.
 2. **Transcripts** — the newest `~/.claude/projects/<project>/<session>.jsonl` is read incrementally (only new bytes) for model, token usage, working directory and timestamps. Message contents are never kept.
 3. **Status line bridge (optional)** — Claude Code passes `rate_limits`, `context_window`, `cost` and `model` to the configured [status line](https://code.claude.com/docs/en/statusline) command after each reply. *Settings → Providers → Install Bridge…* installs a small `/bin/sh` script that stores an allowlisted subset of that JSON (no session titles, transcript paths or other text) in `~/Library/Application Support/AI-usage/claude/statusline.json`, then runs your previous status line command, so your status line keeps working. Installing backs up `~/.claude/settings.json`; *Remove Bridge* restores the previous configuration. The status line is a local hook and never triggers a model request.
 
+4. **Live usage (on by default, Settings → Providers)** — AI-usage asks Anthropic's usage endpoint (`/api/oauth/usage`, the request behind Claude Code's `/usage`) with Claude Code's existing sign-in. It returns utilization counters only and consumes no tokens. The access token is read via `/usr/bin/security` from the `Claude Code-credentials` Keychain item for each request, held in memory only, never logged or stored, and never refreshed (expired tokens are left for Claude Code to renew). Throttled like Codex: launch, menu open (≤ every 2 min), background timer, window reset, manual refresh.
+
 Because Claude Code only learns about usage when it talks to Anthropic for you, AI-usage shows the **last known value with its age** and never asks for fresh data.
 
 ### Freshness and states
@@ -84,7 +86,7 @@ Per provider (*Settings → Menu Bar*): show/hide, order, content (icon + usage,
 
 - Everything stays on your Mac. No analytics, no telemetry, no backend, no network requests of its own. (The Codex CLI's `app-server`, when AI-usage starts it, talks to OpenAI the way Codex normally does — e.g. to answer `account/rateLimits/read`, the same request Codex's own UI makes to show your limits. AI-usage itself makes no network requests.)
 - Transcripts and prompts are never uploaded, logged or persisted. Parsers extract numeric counters, model names, timestamps and working directories only.
-- AI-usage persists only normalized metrics (`~/Library/Application Support/AI-usage/snapshots.json`) and preferences (`UserDefaults`). No credentials are read or stored; the Keychain is not used.
+- AI-usage persists only normalized metrics (`~/Library/Application Support/AI-usage/snapshots.json`) and preferences (`UserDefaults`). No credentials are stored. The only credential read is Claude Code's access token for the optional live usage request (in memory, per request).
 
 ## Development
 
@@ -131,7 +133,7 @@ Adding a provider: implement `UsageProvider` (an actor returning a normalized `U
 ## Current limitations
 
 - Local file formats of Codex and Claude Code are undocumented and may change; parsers are defensive and degrade to "no data" rather than crashing.
-- Claude Code's usage cache is only refreshed when Claude Code decides to fetch it. Without the status line bridge, Claude values can be tens of minutes old (they are shown as stale). The status line only runs in the interactive CLI, not in every Claude Code host.
+- With live usage turned off, Claude values come from Claude Code's own cache and can be tens of minutes old (shown dimmed as stale). The status line bridge only runs in the interactive CLI.
 - Claude rate limits are only available for Pro/Max (claude.ai) sign-in; API-key users get session data only. Codex limits require ChatGPT sign-in.
 - Session tokens/model describe the most recently active session only, not a sum over all sessions.
 - Codex context percentage uses the last turn's total tokens divided by the model's context window; Codex's own UI may apply a small baseline correction.

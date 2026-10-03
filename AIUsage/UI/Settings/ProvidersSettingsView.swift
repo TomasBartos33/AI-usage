@@ -9,7 +9,7 @@ struct ProvidersSettingsView: View {
         Form {
             capabilitySection
             CodexSettingsSection(store: store, preferences: preferences)
-            ClaudeSettingsSection(store: store)
+            ClaudeSettingsSection(store: store, preferences: preferences)
         }
         .formStyle(.grouped)
     }
@@ -98,6 +98,7 @@ private struct CodexSettingsSection: View {
 
 private struct ClaudeSettingsSection: View {
     let store: UsageStore
+    @Bindable var preferences: Preferences
     @State private var bridgeState = ClaudeStatusLineBridge().state()
     @State private var confirmingInstall = false
     @State private var errorMessage: String?
@@ -105,6 +106,11 @@ private struct ClaudeSettingsSection: View {
     var body: some View {
         Section {
             ProviderStatusRows(snapshot: store.snapshots[.claude], now: store.now)
+            Toggle("Fetch live usage from Anthropic", isOn: $preferences.claudeLiveUsage)
+                .onChange(of: preferences.claudeLiveUsage) { _, _ in store.configureProviders() }
+            Text("Asks Anthropic's usage endpoint (the one behind Claude Code's /usage) using Claude Code's sign-in. Counters only, no tokens used; the sign-in token is read from the Keychain for each request and never stored.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
             LabeledContent("Status line bridge") {
                 Text(bridgeDescription)
                     .multilineTextAlignment(.trailing)

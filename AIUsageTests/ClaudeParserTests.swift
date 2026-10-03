@@ -174,4 +174,22 @@ final class ClaudeParserTests: XCTestCase {
         let restored = try XCTUnwrap(LooseJSON.object(Data(contentsOf: settings)))
         XCTAssertNil(restored["statusLine"])
     }
+
+    func testAccessTokenParsing() throws {
+        let now = Date(timeIntervalSince1970: 1_800_000_000)
+        let valid = #"{"claudeAiOauth":{"accessToken":"abc","expiresAt":1800003600000}}"#
+        XCTAssertEqual(try ClaudeUsageAPI.accessToken(fromCredentials: Data(valid.utf8), now: now), "abc")
+        let expired = #"{"claudeAiOauth":{"accessToken":"abc","expiresAt":1799999000000}}"#
+        XCTAssertThrowsError(try ClaudeUsageAPI.accessToken(fromCredentials: Data(expired.utf8), now: now)) {
+            XCTAssertEqual($0 as? ClaudeUsageAPI.APIError, .tokenExpired)
+        }
+        XCTAssertThrowsError(try ClaudeUsageAPI.accessToken(fromCredentials: Data("{}".utf8), now: now))
+    }
+
+    func testUsageEndpointResponse() throws {
+        let json = #"{"five_hour":{"utilization":75.0,"resets_at":"2026-10-03T14:00:00.312422+00:00"},"seven_day":{"utilization":16.0,"resets_at":"2026-10-06T02:00:00.312449+00:00"},"seven_day_opus":null}"#
+        let windows = ClaudeParsers.windows(fromUtilization: try XCTUnwrap(LooseJSON.object(Data(json.utf8))))
+        XCTAssertEqual(windows.map(\.usedPercent), [75, 16])
+        XCTAssertEqual(windows.map(\.kind), [.session, .weekly])
+    }
 }

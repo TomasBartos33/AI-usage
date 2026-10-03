@@ -112,6 +112,7 @@ enum DataSource: String, Codable, Sendable {
     case codexAppServer
     case codexSessionLog
     case claudeUsageCache
+    case claudeUsageAPI
     case claudeStatusLine
     case claudeTranscript
     case demo
@@ -121,6 +122,7 @@ enum DataSource: String, Codable, Sendable {
         case .codexAppServer: return "Codex app-server"
         case .codexSessionLog: return "Codex session log"
         case .claudeUsageCache: return "Claude Code usage cache"
+        case .claudeUsageAPI: return "Anthropic usage API"
         case .claudeStatusLine: return "Claude Code status line"
         case .claudeTranscript: return "Claude Code transcript"
         case .demo: return "Demo data"
