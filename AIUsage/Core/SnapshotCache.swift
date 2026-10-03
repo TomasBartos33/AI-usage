@@ -27,13 +27,20 @@ struct SnapshotCache: Sendable {
 }
 
 enum AppPaths {
+    /// `AI_USAGE_HOME` redirects every path (used to test missing-provider states).
+    private static var homeOverride: URL? {
+        guard let path = ProcessInfo.processInfo.environment["AI_USAGE_HOME"], !path.isEmpty else { return nil }
+        return URL(fileURLWithPath: path, isDirectory: true)
+    }
+
     static var applicationSupport: URL {
-        let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
-            ?? URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Library/Application Support")
+        let base = homeOverride.map { $0.appendingPathComponent("Library/Application Support") }
+            ?? FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
+            ?? home.appendingPathComponent("Library/Application Support")
         return base.appendingPathComponent("AI-usage", isDirectory: true)
     }
 
-    static var home: URL { URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true) }
+    static var home: URL { homeOverride ?? URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true) }
 }
 
 extension JSONDecoder {

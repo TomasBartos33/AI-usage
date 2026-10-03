@@ -25,7 +25,7 @@ enum CodexLocator {
             "\(home)/.bun/bin/codex",
             "\(home)/.volta/bin/codex",
             "/Applications/Codex.app/Contents/Resources/codex",
-            "/Applications/ChatGPT.app/Contents/Resources/codex",
+            "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
         ]
         return paths.map { URL(fileURLWithPath: $0) }
     }
