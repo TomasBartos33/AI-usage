@@ -94,7 +94,7 @@ enum MenuBarFormatter {
 
         let value: Double? = settings.valueMode == .used ? window.usedPercent : window.remainingPercent
         if let value {
-            pieces.append(UsageFormatting.percent(value))
+            pieces.append(settings.showPercentSign ? UsageFormatting.percent(value) : "\(Int(value.rounded()))")
         } else if !(settings.showResetCountdown && window.resetsAt != nil) {
             pieces.append(placeholder)
         }

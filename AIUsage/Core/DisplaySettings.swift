@@ -87,6 +87,8 @@ struct ProviderDisplaySettings: Codable, Equatable, Sendable {
     /// Optional second value, e.g. weekly next to 5 hour.
     var secondaryWindow: WindowSelector?
     var valueMode: ValueMode = .used
+    /// "72%" vs "72".
+    var showPercentSign: Bool = true
     var showWindowLabel: Bool = false
     var showResetCountdown: Bool = false
 
@@ -101,6 +103,7 @@ struct ProviderDisplaySettings: Codable, Equatable, Sendable {
         primaryWindow = (try? c.decode(WindowSelector.self, forKey: .primaryWindow)) ?? d.primaryWindow
         secondaryWindow = try? c.decodeIfPresent(WindowSelector.self, forKey: .secondaryWindow)
         valueMode = (try? c.decode(ValueMode.self, forKey: .valueMode)) ?? d.valueMode
+        showPercentSign = (try? c.decode(Bool.self, forKey: .showPercentSign)) ?? d.showPercentSign
         showWindowLabel = (try? c.decode(Bool.self, forKey: .showWindowLabel)) ?? d.showWindowLabel
         showResetCountdown = (try? c.decode(Bool.self, forKey: .showResetCountdown)) ?? d.showResetCountdown
     }

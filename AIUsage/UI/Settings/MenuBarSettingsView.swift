@@ -84,6 +84,7 @@ private struct ProviderDisplayEditor: View {
                         ForEach(ValueMode.allCases) { Text("\($0.displayName) %").tag($0) }
                     }
                     .pickerStyle(.segmented)
+                    Toggle("Percent sign", isOn: $settings.showPercentSign)
                     Toggle("Window label (5h, W)", isOn: $settings.showWindowLabel)
                     if capabilities.supports(.resetTime) {
                         Toggle("Reset countdown", isOn: $settings.showResetCountdown)

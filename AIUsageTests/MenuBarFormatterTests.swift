@@ -115,4 +115,12 @@ final class MenuBarFormatterTests: XCTestCase {
         let items = MenuBarFormatter.items(snapshots: [.codex: s], options: options([.codex: settings]), now: now)
         XCTAssertEqual(items.first?.text, "2h14m")
     }
+
+    func testPercentSignCanBeHidden() {
+        var settings = ProviderDisplaySettings()
+        settings.showPercentSign = false
+        settings.iconStyle = .name
+        let items = MenuBarFormatter.items(snapshots: [.codex: snapshot()], options: options([.codex: settings]), now: now)
+        XCTAssertEqual(items, [MenuBarItem(provider: .codex, icon: .text("Codex"), text: "72", dimmed: false)])
+    }
 }
