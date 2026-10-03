@@ -78,6 +78,17 @@ private struct MenuBarContent: View {
     private func itemView(_ item: MenuBarItem) -> some View {
         HStack(spacing: 4) {
             switch item.icon {
+            case .logo(let provider):
+                if let logo = ProviderLogo.image(for: provider) {
+                    Image(nsImage: logo)
+                        .renderingMode(.template)
+                        .resizable()
+                        .interpolation(.high)
+                        .frame(width: 15, height: 15)
+                } else {
+                    Image(systemName: ProviderBranding.of(provider).symbolName)
+                        .font(.system(size: 12, weight: .semibold))
+                }
             case .symbol(let name):
                 Image(systemName: name)
                     .font(.system(size: 12, weight: .semibold))

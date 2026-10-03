@@ -28,7 +28,7 @@ final class MenuBarFormatterTests: XCTestCase {
 
     func testDefaultShowsGlyphAndSessionUsage() {
         let items = MenuBarFormatter.items(snapshots: [.codex: snapshot()], options: options(), now: now)
-        XCTAssertEqual(items, [MenuBarItem(provider: .codex, icon: .text("✦"), text: "72%", dimmed: false)])
+        XCTAssertEqual(items, [MenuBarItem(provider: .codex, icon: .logo(.codex), text: "72%", dimmed: false)])
     }
 
     func testRemainingWithLabelAndCountdown() {

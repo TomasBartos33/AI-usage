@@ -16,6 +16,7 @@ final class Preferences {
         static let separator = "menuBarSeparator"
         static let codexExecutablePath = "codexExecutablePath"
         static let demoMode = "demoMode"
+        static let schemaVersion = "preferencesVersion"
     }
 
     @ObservationIgnored private let defaults: UserDefaults
@@ -74,6 +75,13 @@ final class Preferences {
         for id in ProviderID.builtIn where display[id] == nil {
             display[id] = Preferences.defaultDisplay(for: id)
         }
+        // v3: provider logos replaced glyphs as the default icon.
+        let migrate = defaults.integer(forKey: Key.schemaVersion) < 3
+        if migrate {
+            for (id, settings) in display where settings.iconStyle == .glyph {
+                display[id]?.iconStyle = .logo
+            }
+        }
         self.display = display
 
         if defaults.object(forKey: Key.refreshInterval) != nil,
@@ -90,6 +98,12 @@ final class Preferences {
         codexExecutablePath = defaults.string(forKey: Key.codexExecutablePath) ?? ""
         demoMode = defaults.bool(forKey: Key.demoMode)
             || ProcessInfo.processInfo.arguments.contains("--demo")
+
+        if migrate {
+            // Property observers don't run during init, so persist explicitly.
+            saveDisplay()
+            defaults.set(3, forKey: Key.schemaVersion)
+        }
     }
 
     var staleAfter: TimeInterval { TimeInterval(staleAfterMinutes * 60) }

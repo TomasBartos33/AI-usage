@@ -2,6 +2,7 @@ import Foundation
 
 /// How a provider is identified in the menu bar.
 enum IconStyle: String, Codable, CaseIterable, Sendable, Identifiable {
+    case logo         // provider logo, loaded from the provider's installed app
     case sparkle      // generic SF Symbol sparkle
     case symbol       // provider specific SF Symbol placeholder
     case glyph        // unicode glyph (✦, ◈)
@@ -12,6 +13,7 @@ enum IconStyle: String, Codable, CaseIterable, Sendable, Identifiable {
 
     var displayName: String {
         switch self {
+        case .logo: return "Logo"
         case .sparkle: return "Sparkle"
         case .symbol: return "Provider symbol"
         case .glyph: return "Glyph"
@@ -81,7 +83,7 @@ enum ValueMode: String, Codable, CaseIterable, Sendable, Identifiable {
 /// later never resets a user's settings.
 struct ProviderDisplaySettings: Codable, Equatable, Sendable {
     var showInMenuBar: Bool = true
-    var iconStyle: IconStyle = .glyph
+    var iconStyle: IconStyle = .logo
     var content: LabelContent = .iconAndValue
     var primaryWindow: WindowSelector = .session
     /// Optional second value, e.g. weekly next to 5 hour.

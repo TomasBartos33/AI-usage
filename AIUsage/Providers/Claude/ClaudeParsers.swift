@@ -23,7 +23,13 @@ enum ClaudeParsers {
     static func usageCache(fromGlobalState state: [String: Any]) -> UsageCache? {
         guard let cache = LooseJSON.dict(state["cachedUsageUtilization"]),
               let utilization = LooseJSON.dict(cache["utilization"]) else { return nil }
-        let windows: [UsageWindow] = knownBuckets.compactMap { bucket in
+        return UsageCache(windows: windows(fromUtilization: utilization), fetchedAt: LooseJSON.date(cache["fetchedAtMs"]))
+    }
+
+    /// Parses a utilization object (`five_hour`, `seven_day`, ...). The same shape is
+    /// used by Claude Code's cache and by the usage endpoint behind `/usage`.
+    static func windows(fromUtilization utilization: [String: Any]) -> [UsageWindow] {
+        knownBuckets.compactMap { bucket in
             guard let raw = LooseJSON.dict(utilization[bucket.key]) else { return nil }
             let used = LooseJSON.double(raw["utilization"])
             let resetsAt = LooseJSON.date(raw["resets_at"])
@@ -31,7 +37,6 @@ enum ClaudeParsers {
             return UsageWindow(id: bucket.key, name: bucket.name, shortName: bucket.short, kind: bucket.kind,
                                durationMinutes: bucket.minutes, usedPercent: used.map { max(0, $0) }, resetsAt: resetsAt)
         }
-        return UsageCache(windows: windows, fetchedAt: LooseJSON.date(cache["fetchedAtMs"]))
     }
 
     enum AccountState: Equatable {

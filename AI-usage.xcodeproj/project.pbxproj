@@ -26,6 +26,7 @@
 		95D749440530C2B10424EB67 /* CodexProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384DCF50EA533AABD5B22B14 /* CodexProvider.swift */; };
 		9EAF9B256CEDA477B4DB6109 /* ProviderBranding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F929605026FB92EA0EE9A5 /* ProviderBranding.swift */; };
 		A018E46866C90BB1F750FF8D /* CodexParsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FFB461FDDB2412BC459D760 /* CodexParsers.swift */; };
+		A09C3FE816C33EF872D3D5F0 /* ProviderLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D01821CAC2164CC51CAC11 /* ProviderLogo.swift */; };
 		A5BE76B39CE646C683C22DD1 /* CodexParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57148E8A567AC6E1DC6E8B89 /* CodexParserTests.swift */; };
 		A8D5281667DA614842FFB43E /* MenuBarFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC1FFE18D884B8F39A30ABB /* MenuBarFormatter.swift */; };
 		AA9122AB81E6A005F616EB88 /* ClaudeParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E5783D3CCF3D406B1A3468 /* ClaudeParserTests.swift */; };
@@ -67,6 +68,7 @@
 		468139D67B7654CB84844CAB /* ProviderFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderFactory.swift; sourceTree = "<group>"; };
 		485D17A7E7EE8B982599BEE7 /* LooseJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LooseJSON.swift; sourceTree = "<group>"; };
 		4E0E7F02B6C58A2EC964B6D8 /* UsageFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageFormatting.swift; sourceTree = "<group>"; };
+		50D01821CAC2164CC51CAC11 /* ProviderLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderLogo.swift; sourceTree = "<group>"; };
 		57148E8A567AC6E1DC6E8B89 /* CodexParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodexParserTests.swift; sourceTree = "<group>"; };
 		5968B28FEBFA7C9628BACC22 /* ClaudeParsers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeParsers.swift; sourceTree = "<group>"; };
 		5D1EAE0BCA5E3E6A7611041B /* UsageModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageModels.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				7663C2EDF6893417BA47DC4F /* MenuBarLabel.swift */,
+				50D01821CAC2164CC51CAC11 /* ProviderLogo.swift */,
 				7917065A8AF550BA9B9265CE /* UsagePanel.swift */,
 				F51C0780D0F13258005C0683 /* Settings */,
 			);
@@ -347,6 +350,7 @@
 				488BBEB46F54035BDDB6764D /* Preferences.swift in Sources */,
 				9EAF9B256CEDA477B4DB6109 /* ProviderBranding.swift in Sources */,
 				E8E9B0298B11E9AEA08D524E /* ProviderFactory.swift in Sources */,
+				A09C3FE816C33EF872D3D5F0 /* ProviderLogo.swift in Sources */,
 				DA5178033912E128A3C5BF56 /* ProvidersSettingsView.swift in Sources */,
 				1601EA99C8B609E8578BE5F1 /* SettingsView.swift in Sources */,
 				4CF09BF25DEDB4A813550588 /* SnapshotCache.swift in Sources */,

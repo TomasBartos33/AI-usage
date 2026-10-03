@@ -3,6 +3,8 @@ import Foundation
 /// One provider's portion of the menu bar title.
 struct MenuBarItem: Equatable, Sendable {
     enum Icon: Equatable, Sendable {
+        /// Provider logo; the renderer falls back to the provider symbol when unavailable.
+        case logo(ProviderID)
         case symbol(String)
         case text(String)
     }
@@ -42,7 +44,7 @@ enum MenuBarFormatter {
         if unavailable && !options.showUnavailableProviders { return nil }
 
         let stale = snapshot?.freshness(at: now, staleAfter: options.staleAfter) == .stale
-        var icon = self.icon(style: settings.iconStyle, branding: branding)
+        var icon = self.icon(style: settings.iconStyle, provider: id, branding: branding)
         var text: String?
 
         if settings.content != .iconOnly {
@@ -58,8 +60,9 @@ enum MenuBarFormatter {
         return MenuBarItem(provider: id, icon: icon, text: text, dimmed: unavailable || stale)
     }
 
-    static func icon(style: IconStyle, branding: ProviderBranding) -> MenuBarItem.Icon? {
+    static func icon(style: IconStyle, provider: ProviderID, branding: ProviderBranding) -> MenuBarItem.Icon? {
         switch style {
+        case .logo: return .logo(provider)
         case .sparkle: return .symbol("sparkle")
         case .symbol: return .symbol(branding.symbolName)
         case .glyph: return .text(branding.glyph)
