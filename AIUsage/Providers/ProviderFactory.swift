@@ -3,10 +3,12 @@ import Foundation
 @MainActor
 enum ProviderFactory {
     static func makeProviders(preferences: Preferences) -> [ProviderID: any UsageProvider] {
-        var result: [ProviderID: any UsageProvider] = [:]
-        for id in ProviderID.builtIn {
-            result[id] = DemoProvider(id: id)
+        if preferences.demoMode {
+            return Dictionary(uniqueKeysWithValues: ProviderID.builtIn.map { ($0, DemoProvider(id: $0) as any UsageProvider) })
         }
-        return result
+        let override = preferences.codexExecutablePath.trimmingCharacters(in: .whitespaces)
+        return [
+            .codex: CodexProvider(executableOverride: override.isEmpty ? nil : override),
+        ]
     }
 }
