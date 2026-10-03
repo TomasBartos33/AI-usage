@@ -5,6 +5,9 @@ import SwiftUI
 struct UsagePanel: View {
     let store: UsageStore
     @Environment(\.openSettings) private var openSettings
+    /// Kept for the lifetime of the reusable menu window. Start expanded so
+    /// opening the menu always shows every provider until the user collapses it.
+    @State private var collapsedProviders: Set<ProviderID> = []
 
     var body: some View {
         let ids = store.orderedProviderIDs.filter { store.provider($0) != nil }
@@ -17,7 +20,17 @@ struct UsagePanel: View {
                     capabilities: store.capabilities(of: id),
                     isRefreshing: store.refreshing.contains(id),
                     now: store.now,
-                    staleAfter: store.preferences.staleAfter
+                    staleAfter: store.preferences.staleAfter,
+                    isExpanded: Binding(
+                        get: { !collapsedProviders.contains(id) },
+                        set: { expanded in
+                            if expanded {
+                                collapsedProviders.remove(id)
+                            } else {
+                                collapsedProviders.insert(id)
+                            }
+                        }
+                    )
                 )
             }
             if store.preferences.demoMode {
@@ -127,32 +140,35 @@ struct ProviderSection: View {
     let isRefreshing: Bool
     let now: Date
     let staleAfter: TimeInterval
+    @Binding var isExpanded: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             header
-            if let snapshot {
-                if !snapshot.windows.isEmpty {
-                    ForEach(snapshot.windows) { window in
-                        WindowRow(window: window, now: now, stale: snapshot.freshness(at: now, staleAfter: staleAfter) == .stale)
+            if isExpanded {
+                if let snapshot {
+                    if !snapshot.windows.isEmpty {
+                        ForEach(snapshot.windows) { window in
+                            WindowRow(window: window, now: now, stale: snapshot.freshness(at: now, staleAfter: staleAfter) == .stale)
+                        }
+                    } else if snapshot.status == .ok, capabilities.supportsRateLimits {
+                        Text("No rate-limit data yet")
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
                     }
-                } else if snapshot.status == .ok, capabilities.supportsRateLimits {
-                    Text("No rate-limit data yet")
+                    details(snapshot)
+                    if let note = snapshot.note {
+                        Text(note)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    footer(snapshot)
+                } else {
+                    Text(isRefreshing ? "Loading…" : "No data")
                         .font(.callout)
                         .foregroundStyle(.secondary)
                 }
-                details(snapshot)
-                if let note = snapshot.note {
-                    Text(note)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                footer(snapshot)
-            } else {
-                Text(isRefreshing ? "Loading…" : "No data")
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
             }
         }
     }
@@ -178,6 +194,26 @@ struct ProviderSection: View {
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             }
+            if let appURL = AppLauncher.applicationURL(for: id) {
+                Button {
+                    AppLauncher.open(appURL)
+                } label: {
+                    Image(systemName: "arrow.up.forward.app")
+                        .frame(width: 18, height: 18)
+                }
+                .buttonStyle(.plain)
+                .help("Open \(ProviderBranding.of(id).shortName)")
+                .accessibilityLabel("Open \(ProviderBranding.of(id).shortName)")
+            }
+            Button {
+                isExpanded.toggle()
+            } label: {
+                Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                    .frame(width: 18, height: 18)
+            }
+            .buttonStyle(.plain)
+            .help(isExpanded ? "Collapse \(ProviderBranding.of(id).displayName) details" : "Show \(ProviderBranding.of(id).displayName) details")
+            .accessibilityLabel(isExpanded ? "Collapse \(ProviderBranding.of(id).displayName) details" : "Show \(ProviderBranding.of(id).displayName) details")
         }
     }
 
