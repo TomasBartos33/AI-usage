@@ -166,6 +166,6 @@ actor CodexProvider: UsageProvider {
     }
 
     private func modificationDate(_ url: URL) -> Date {
-        (try? url.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate) ?? .distantPast
+        FileInfo.modificationDate(url) ?? .distantPast
     }
 }
