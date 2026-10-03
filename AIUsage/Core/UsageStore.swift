@@ -140,8 +140,21 @@ final class UsageStore {
     }
 
     private func apply(_ snapshot: UsageSnapshot) {
-        guard snapshots[snapshot.provider] != snapshot else { return }
+        guard let current = snapshots[snapshot.provider] else {
+            snapshots[snapshot.provider] = snapshot
+            persistAndReschedule()
+            return
+        }
+        // Ignore the refresh timestamp when deciding whether anything changed, so
+        // frequent file-change refreshes don't rewrite the cache or re-render the menu bar.
+        var comparable = current
+        comparable.refreshedAt = snapshot.refreshedAt
+        guard comparable != snapshot else { return }
         snapshots[snapshot.provider] = snapshot
+        persistAndReschedule()
+    }
+
+    private func persistAndReschedule() {
         if !preferences.demoMode {
             cache.save(snapshots)
         }
