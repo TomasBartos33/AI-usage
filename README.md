@@ -11,11 +11,12 @@ A lightweight, native macOS menu bar app that shows how much of your AI coding-t
 
 ## Screenshots
 
-Rendered with demo data (`--demo`):
+Rendered with deterministic demo data (`--demo`). The menu bar previews use the
+providers' monochrome logo templates:
 
 | Menu bar | Detail panel |
 |---|---|
-| ![Menu bar, light](docs/screenshots/menubar-light.png) ![Menu bar, dark](docs/screenshots/menubar-dark.png) | <img src="docs/screenshots/panel-light.png" width="300" alt="Detail panel"> |
+| ![Menu bar with Codex and Claude logos, light](docs/screenshots/menubar-light.png) ![Menu bar with Codex and Claude logos, dark](docs/screenshots/menubar-dark.png) | <img src="docs/screenshots/panel-light.png" width="300" alt="Detail panel"> |
 
 _Settings window screenshots: TODO._
 
