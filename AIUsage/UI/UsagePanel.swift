@@ -235,6 +235,9 @@ struct ProviderSection: View {
             }
             return UsageFormatting.percent(percent)
         }
+        if let tokens = session.contextTokens {
+            return "\(UsageFormatting.tokens(tokens)) tokens"
+        }
         return nil
     }
 

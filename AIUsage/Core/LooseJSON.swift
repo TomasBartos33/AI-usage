@@ -105,3 +105,10 @@ enum FileTail {
         }
     }
 }
+
+enum FileInfo {
+    /// Uncached modification date (URL resource values are cached per URL instance).
+    static func modificationDate(_ url: URL) -> Date? {
+        (try? FileManager.default.attributesOfItem(atPath: url.path))?[.modificationDate] as? Date
+    }
+}

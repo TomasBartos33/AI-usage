@@ -138,6 +138,8 @@ enum Freshness: Equatable, Sendable {
 struct SessionInfo: Codable, Equatable, Sendable {
     var model: String?
     var contextUsedPercent: Double?
+    /// Tokens currently in the context window (when the percentage is unknown).
+    var contextTokens: Int?
     var contextWindowTokens: Int?
     var inputTokens: Int?
     var outputTokens: Int?
@@ -147,7 +149,7 @@ struct SessionInfo: Codable, Equatable, Sendable {
     var lastActivity: Date?
 
     var isEmpty: Bool {
-        model == nil && contextUsedPercent == nil && inputTokens == nil && outputTokens == nil
+        model == nil && contextUsedPercent == nil && contextTokens == nil && inputTokens == nil && outputTokens == nil
             && costUSD == nil && workingDirectory == nil && lastActivity == nil
     }
 }

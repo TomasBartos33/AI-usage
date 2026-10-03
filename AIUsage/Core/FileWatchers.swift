@@ -57,6 +57,7 @@ final class SingleFileWatcher {
     private let handler: @Sendable () -> Void
     private var source: DispatchSourceFileSystemObject?
     private var retryWork: DispatchWorkItem?
+    private var notifyWork: DispatchWorkItem?
     private var stopped = false
 
     init(url: URL, handler: @escaping @Sendable () -> Void) {
@@ -92,7 +93,7 @@ final class SingleFileWatcher {
         source.setEventHandler { [weak self] in
             guard let self, let source = self.source else { return }
             let event = source.data
-            self.handler()
+            self.scheduleNotification()
             if !event.isDisjoint(with: [.delete, .rename, .revoke]) {
                 source.cancel()
                 self.source = nil
@@ -103,6 +104,14 @@ final class SingleFileWatcher {
         source.setCancelHandler { close(fd) }
         self.source = source
         source.resume()
+    }
+
+    /// Coalesces bursts of writes (some tools rewrite their state file several times per second).
+    private func scheduleNotification() {
+        notifyWork?.cancel()
+        let work = DispatchWorkItem { [weak self] in self?.handler() }
+        notifyWork = work
+        queue.asyncAfter(deadline: .now() + 1, execute: work)
     }
 
     private func scheduleRetry(after delay: TimeInterval) {
