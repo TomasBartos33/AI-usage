@@ -31,7 +31,11 @@ struct UsagePanel: View {
         }
         .padding(14)
         .frame(width: 300)
-        .onAppear { store.menuOpened() }
+        // The menu bar window is reused; refresh each time it is shown.
+        .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)) { note in
+            guard let window = note.object as? NSWindow, !window.styleMask.contains(.titled) else { return }
+            store.menuOpened()
+        }
     }
 
     private var actions: some View {
