@@ -9,7 +9,7 @@ enum ProviderFactory {
         let override = preferences.codexExecutablePath.trimmingCharacters(in: .whitespaces)
         return [
             .codex: CodexProvider(executableOverride: override.isEmpty ? nil : override),
-            .claude: ClaudeProvider(watchBridge: ClaudeStatusLineBridge.isInstalled),
+            .claude: ClaudeProvider(watchBridge: ClaudeStatusLineBridge().isInstalled),
         ]
     }
 }

@@ -8,13 +8,18 @@ import Foundation
 /// a model request. The bridge script keeps an allowlisted subset of that JSON
 /// (no session titles, transcript paths or other text) for AI-usage, then runs
 /// the user's previous status line command so their status line keeps working.
-enum ClaudeStatusLineBridge {
-    static var scriptURL: URL {
-        AppPaths.applicationSupport.appendingPathComponent("bin/claude-statusline-bridge.sh")
-    }
+struct ClaudeStatusLineBridge {
+    /// AI-usage's Application Support directory (overridable for tests).
+    var supportDirectory = AppPaths.applicationSupport
+    /// Claude Code user settings file.
+    var settingsFile = ClaudePaths.userSettingsFile
 
-    private static var previousCommandFile: URL { ClaudePaths.bridgeDirectory.appendingPathComponent("previous-command") }
-    private static var previousConfigFile: URL { ClaudePaths.bridgeDirectory.appendingPathComponent("previous-statusline.json") }
+    var scriptURL: URL { supportDirectory.appendingPathComponent("bin/claude-statusline-bridge.sh") }
+    /// Must match the directory hard-coded in `script`.
+    var bridgeDirectory: URL { supportDirectory.appendingPathComponent("claude", isDirectory: true) }
+    var snapshotFile: URL { bridgeDirectory.appendingPathComponent("statusline.json") }
+    private var previousCommandFile: URL { bridgeDirectory.appendingPathComponent("previous-command") }
+    private var previousConfigFile: URL { bridgeDirectory.appendingPathComponent("previous-statusline.json") }
 
     enum State: Equatable {
         case notInstalled
@@ -23,12 +28,12 @@ enum ClaudeStatusLineBridge {
         case otherStatusLine(command: String)
     }
 
-    static var isInstalled: Bool {
+    var isInstalled: Bool {
         if case .installed = state() { return true }
         return false
     }
 
-    static func state(settingsFile: URL = ClaudePaths.userSettingsFile) -> State {
+    func state() -> State {
         let settings = readSettings(settingsFile) ?? [:]
         guard let statusLine = settings["statusLine"] as? [String: Any],
               let command = statusLine["command"] as? String else { return .notInstalled }
@@ -40,11 +45,11 @@ enum ClaudeStatusLineBridge {
 
     /// Installs the script and points Claude Code's user settings at it.
     /// The previous status line configuration is saved for `uninstall()`.
-    static func install(settingsFile: URL = ClaudePaths.userSettingsFile) throws {
+    func install() throws {
         let fm = FileManager.default
         try fm.createDirectory(at: scriptURL.deletingLastPathComponent(), withIntermediateDirectories: true)
-        try fm.createDirectory(at: ClaudePaths.bridgeDirectory, withIntermediateDirectories: true)
-        try script.write(to: scriptURL, atomically: true, encoding: .utf8)
+        try fm.createDirectory(at: bridgeDirectory, withIntermediateDirectories: true)
+        try Self.script.write(to: scriptURL, atomically: true, encoding: .utf8)
         try fm.setAttributes([.posixPermissions: 0o755], ofItemAtPath: scriptURL.path)
 
         var settings = readSettings(settingsFile) ?? [:]
@@ -73,10 +78,10 @@ enum ClaudeStatusLineBridge {
     }
 
     /// Restores the previous status line (or removes ours) and deletes bridge files.
-    static func uninstall(settingsFile: URL = ClaudePaths.userSettingsFile) throws {
+    func uninstall() throws {
         let fm = FileManager.default
         var settings = readSettings(settingsFile) ?? [:]
-        if case .installed = state(settingsFile: settingsFile) {
+        if case .installed = state() {
             if let data = try? Data(contentsOf: previousConfigFile),
                let previous = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
                 settings["statusLine"] = previous
@@ -85,17 +90,17 @@ enum ClaudeStatusLineBridge {
             }
             try writeSettings(settings, to: settingsFile)
         }
-        for url in [previousConfigFile, previousCommandFile, ClaudePaths.bridgeSnapshotFile, scriptURL] {
+        for url in [previousConfigFile, previousCommandFile, snapshotFile, scriptURL] {
             try? fm.removeItem(at: url)
         }
     }
 
-    private static func readSettings(_ url: URL) -> [String: Any]? {
+    private func readSettings(_ url: URL) -> [String: Any]? {
         guard let data = try? Data(contentsOf: url) else { return nil }
         return (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
     }
 
-    private static func writeSettings(_ settings: [String: Any], to url: URL) throws {
+    private func writeSettings(_ settings: [String: Any], to url: URL) throws {
         let data = try JSONSerialization.data(withJSONObject: settings, options: [.prettyPrinted, .withoutEscapingSlashes])
         try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
         try data.write(to: url, options: .atomic)

@@ -130,4 +130,48 @@ final class ClaudeParserTests: XCTestCase {
         let leftovers = try FileManager.default.contentsOfDirectory(atPath: output.deletingLastPathComponent().path)
         XCTAssertEqual(leftovers, ["statusline.json"])
     }
+
+    func testBridgeInstallChainsAndRestoresPreviousStatusLine() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let settings = root.appendingPathComponent("claude/settings.json")
+        try FileManager.default.createDirectory(at: settings.deletingLastPathComponent(), withIntermediateDirectories: true)
+        let original = #"{"model":"sonnet","statusLine":{"type":"command","command":"~/bin/my-line.sh","padding":1}}"#
+        try Data(original.utf8).write(to: settings)
+
+        let bridge = ClaudeStatusLineBridge(supportDirectory: root.appendingPathComponent("support"), settingsFile: settings)
+        XCTAssertEqual(bridge.state(), .otherStatusLine(command: "~/bin/my-line.sh"))
+
+        try bridge.install()
+        XCTAssertEqual(bridge.state(), .installed(chainsPreviousCommand: true))
+        XCTAssertTrue(FileManager.default.isExecutableFile(atPath: bridge.scriptURL.path))
+        let installed = try XCTUnwrap(LooseJSON.object(Data(contentsOf: settings)))
+        XCTAssertEqual(installed["model"] as? String, "sonnet")
+        let statusLine = try XCTUnwrap(installed["statusLine"] as? [String: Any])
+        XCTAssertEqual(statusLine["padding"] as? Int, 1)
+        XCTAssertTrue((statusLine["command"] as? String)?.contains("claude-statusline-bridge.sh") == true)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: settings.path + ".ai-usage-backup"))
+
+        // Installing twice must not record the bridge itself as the previous command.
+        try bridge.install()
+        try bridge.uninstall()
+        let restored = try XCTUnwrap(LooseJSON.object(Data(contentsOf: settings)))
+        let restoredLine = try XCTUnwrap(restored["statusLine"] as? [String: Any])
+        XCTAssertEqual(restoredLine["command"] as? String, "~/bin/my-line.sh")
+        XCTAssertEqual(bridge.state(), .otherStatusLine(command: "~/bin/my-line.sh"))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: bridge.scriptURL.path))
+    }
+
+    func testBridgeInstallWithoutPreviousStatusLine() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let settings = root.appendingPathComponent("settings.json")
+        let bridge = ClaudeStatusLineBridge(supportDirectory: root.appendingPathComponent("support"), settingsFile: settings)
+        XCTAssertEqual(bridge.state(), .notInstalled)
+        try bridge.install()
+        XCTAssertEqual(bridge.state(), .installed(chainsPreviousCommand: false))
+        try bridge.uninstall()
+        let restored = try XCTUnwrap(LooseJSON.object(Data(contentsOf: settings)))
+        XCTAssertNil(restored["statusLine"])
+    }
 }

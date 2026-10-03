@@ -166,15 +166,21 @@ struct TranscriptAccumulator {
             // Very large transcripts: only aggregate the most recent part.
             offset = size > maxInitialBytes ? size - maxInitialBytes : 0
         }
-        guard size > offset, (try? handle.seek(toOffset: offset)) != nil,
-              let data = try? handle.readToEnd() else { return }
-        // Only consume complete lines; a partially written last line is read next time.
-        guard let lastNewline = data.lastIndex(of: 0x0A) else { return }
-        let complete = data[data.startIndex...lastNewline]
-        offset += UInt64(complete.count)
-        for line in String(decoding: complete, as: UTF8.self).split(separator: "\n") {
-            guard let entry = ClaudeParsers.transcriptEntry(line: line) else { continue }
-            ingest(entry)
+        guard size > offset, (try? handle.seek(toOffset: offset)) != nil else { return }
+        // Stream in chunks to keep peak memory low on large transcripts.
+        var pending = Data()
+        while let chunk = try? handle.read(upToCount: 1_048_576), !chunk.isEmpty {
+            pending.append(chunk)
+            // Only consume complete lines; a partially written last line is read next time.
+            guard let lastNewline = pending.lastIndex(of: 0x0A) else { continue }
+            let complete = pending[pending.startIndex...lastNewline]
+            offset += UInt64(complete.count)
+            for line in complete.split(separator: 0x0A) {
+                if let entry = ClaudeParsers.transcriptEntry(line: String(decoding: line, as: UTF8.self)) {
+                    ingest(entry)
+                }
+            }
+            pending = Data(pending[pending.index(after: lastNewline)...])
         }
     }
 
