@@ -51,6 +51,7 @@ const FEATURES = [
 export default function Home() {
   return (
     <>
+      <div className="fixed left-0 top-0 right-0 rotate-180 z-10 bg-linear-to-t from-white/80  to-transparent w-full h-30 fade-blur-overlay-no-color backdrop-blur-xs"></div>
       <Nav />
       <main>
         {/* Hero */}
@@ -153,7 +154,7 @@ export default function Home() {
         </section>
 
         {/* Providers */}
-        <section className="py-24 text-center">
+        <section className="py-24 text-center" id="providers">
           <div className="mx-auto max-w-[1024px] px-5">
             <h2 className="mx-auto max-w-[16ch] text-4xl font-semibold leading-[1.08] tracking-[-0.025em] sm:text-6xl">
               Two tools. One glance.

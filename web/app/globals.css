@@ -140,3 +140,21 @@ body {
     scroll-behavior: auto;
   }
 }
+
+.fade-blur-overlay-no-color {
+  will-change: auto;
+
+  /* Soft fade mask so there is no hard straight edge */
+  -webkit-mask-image: radial-gradient(
+    200% 90% at 50% 100%,
+    #000 55%,
+    #0000 100%
+  );
+  mask-image: radial-gradient(200% 90% at 50% 100%, #000 55%, #0000 100%);
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}

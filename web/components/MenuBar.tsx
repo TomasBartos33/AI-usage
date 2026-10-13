@@ -26,7 +26,7 @@ export function MenuBar() {
   }, []);
 
   return (
-    <div className="flex h-8 items-center justify-between bg-white/20 px-4 backdrop-blur-xl backdrop-saturate-150 text-[13px] font-medium text-white dark:bg-black/30">
+    <div className="flex h-8 items-center justify-between  px-4  text-[13px] font-medium text-white dark:bg-black/30">
       <div className="flex items-center gap-3">
         <FaApple className="size-[15px]" aria-label="Apple" />
         <span className="hidden sm:block text-md font-bold">AI-usage</span>
