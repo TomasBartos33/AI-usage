@@ -3,6 +3,7 @@ import { Shot } from "@/components/Shot";
 import { MenuBar } from "@/components/MenuBar";
 import { CopyCommand } from "@/components/CopyCommand";
 import { SITE } from "@/lib/site";
+import Image from "next/image";
 
 const FEATURES = [
   {
@@ -86,9 +87,10 @@ export default function Home() {
           className="mx-auto max-w-[1024px] px-5 pb-24 pt-10"
         >
           <div
-            className="reveal isolate overflow-hidden rounded-xl bg-gradient-to-b from-[#7aa7ff] via-[#a78bfa] to-[#f0abfc] shadow-[0_40px_80px_-30px_rgba(0,0,0,0.45)] dark:from-[#1d3a8a] dark:via-[#4c1d95] dark:to-[#831843]"
-            style={{ animationDelay: ".35s" }}
+            className="reveal relative isolate overflow-hidden rounded-xl shadow-[0_40px_80px_-30px_rgba(0,0,0,0.45)]"
+            style={{ animationDelay: ".35s", clipPath: "inset(0 round 0.75rem)" }}
           >
+            <Image src="/bg.jpg" alt="" fill priority sizes="(min-width: 1024px) 984px, 100vw" className="-z-10 object-cover" />
             <MenuBar />
             <div className="flex justify-center px-5 pb-12 pt-6 sm:justify-end sm:pr-[12%]">
               <Shot

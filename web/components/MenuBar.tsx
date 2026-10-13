@@ -6,7 +6,10 @@ import { RiClaudeFill, RiOpenaiFill } from "react-icons/ri";
 // macOS shows e.g. "Tue 13 Oct  11:55:35" in 24-hour time.
 function format(d: Date) {
   const day = d.toLocaleDateString("en-GB", { weekday: "short" });
-  const date = d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+  const date = d.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+  });
   const time = d.toLocaleTimeString("en-GB", { hour12: false });
   return `${day} ${date}  ${time}`;
 }
@@ -23,10 +26,13 @@ export function MenuBar() {
   }, []);
 
   return (
-    <div className="flex h-8 items-center justify-between bg-white/25 px-4 text-[13px] font-medium text-white dark:bg-black/25">
+    <div className="flex h-8 items-center justify-between bg-white/20 px-4 backdrop-blur-xl backdrop-saturate-150 text-[13px] font-medium text-white dark:bg-black/30">
       <FaApple className="size-[15px]" aria-label="Apple" />
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-3 tabular-nums" aria-label="AI-usage: OpenAI Codex 72%, Claude Code 41%">
+        <div
+          className="flex items-center gap-3 tabular-nums"
+          aria-label="AI-usage: OpenAI Codex 72%, Claude Code 41%"
+        >
           <span className="flex items-center gap-1.5">
             <RiOpenaiFill className="size-[15px]" aria-hidden />
             72%
@@ -36,7 +42,9 @@ export function MenuBar() {
             41%
           </span>
         </div>
-        <time className="min-w-[10.5rem] text-right tabular-nums" suppressHydrationWarning>{now || " "}</time>
+        <time className="text-right tabular-nums" suppressHydrationWarning>
+          {now || " "}
+        </time>
       </div>
     </div>
   );
