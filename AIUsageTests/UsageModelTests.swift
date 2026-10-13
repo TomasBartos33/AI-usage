@@ -59,7 +59,10 @@ final class UsageModelTests: XCTestCase {
     }
 
     func testResetDescription() {
-        XCTAssertEqual(UsageFormatting.resetDescription(now.addingTimeInterval(8040), now: now), "resets in 2h 14m")
+        var utc = Calendar(identifier: .gregorian)
+        utc.timeZone = TimeZone(identifier: "UTC")!
+        let base = Date(timeIntervalSince1970: 1_700_000_000) // 22:13:20 UTC
+        XCTAssertEqual(UsageFormatting.resetDescription(base.addingTimeInterval(8040), now: base, calendar: utc), "resets in 2h 14m at 00:27")
         XCTAssertTrue(UsageFormatting.resetDescription(now.addingTimeInterval(-120), now: now).hasPrefix("reset "))
     }
 

@@ -19,15 +19,21 @@ enum UsageFormatting {
         return "<1m"
     }
 
-    /// "resets in 2h 14m" for near resets, "resets Sun 18:42" for distant ones.
+    /// "resets in 2h 14m at 18:42" for near resets, "resets Sun 18:42" for distant ones.
     static func resetDescription(_ date: Date, now: Date, calendar: Calendar = .current, locale: Locale = .current) -> String {
         let interval = date.timeIntervalSince(now)
         if interval <= 0 { return "reset \(relativePast(date, now: now))" }
         if interval < 24 * 3600 {
             let minutes = Int(interval / 60)
             let h = minutes / 60, m = minutes % 60
-            if h == 0 { return m == 0 ? "resets in <1m" : "resets in \(m)m" }
-            return m == 0 ? "resets in \(h)h" : "resets in \(h)h \(m)m"
+            let clock = DateFormatter()
+            clock.calendar = calendar
+            clock.timeZone = calendar.timeZone
+            clock.locale = Locale(identifier: "en_US_POSIX")
+            clock.dateFormat = "HH:mm"
+            let at = " at \(clock.string(from: date))"
+            if h == 0 { return (m == 0 ? "resets in <1m" : "resets in \(m)m") + at }
+            return (m == 0 ? "resets in \(h)h" : "resets in \(h)h \(m)m") + at
         }
         let formatter = DateFormatter()
         formatter.calendar = calendar
