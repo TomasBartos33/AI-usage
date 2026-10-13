@@ -51,7 +51,6 @@ const FEATURES = [
 export default function Home() {
   return (
     <>
-      <div className="fixed left-0 top-0 right-0 rotate-180 z-10 bg-linear-to-t from-white/80  to-transparent w-full h-30 fade-blur-overlay-no-color backdrop-blur-xs"></div>
       <Nav />
       <main>
         {/* Hero */}
@@ -65,12 +64,12 @@ export default function Home() {
             className="reveal mx-auto rounded-[26px] border border-line shadow-2xl"
           />
           <h1
-            className="reveal mx-auto mt-8 text-[2.75rem] font-bold leading-[0.9] tracking-tight sm:text-7xl"
+            className="reveal mx-auto mt-8 text-[2.75rem] font-bold leading-[1] tracking-tight sm:text-7xl"
             style={{ animationDelay: ".08s" }}
           >
-            Your AI limits.
+            All your AI limits
             <br />
-            At a glance.
+            at a <span>glance</span>.
           </h1>
           <p
             className="reveal mx-auto mt-6 max-w-[34rem] text-xl leading-snug text-fg2 sm:text-2xl"
@@ -149,7 +148,7 @@ export default function Home() {
         {/* Features */}
         <section id="features" className="bg-alt py-24">
           <div className="mx-auto max-w-[1024px] px-5">
-            <h2 className="max-w-[18ch] text-4xl font-semibold leading-[1.08] tracking-[-0.025em] sm:text-6xl">
+            <h2 className="max-w-[16ch] text-4xl font-semibold leading-[1.08] tracking-[-0.025em] sm:text-6xl">
               Know before you hit the wall.
             </h2>
             <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
