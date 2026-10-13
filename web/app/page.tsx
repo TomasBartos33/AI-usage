@@ -101,32 +101,48 @@ export default function Home() {
         {/* Product shot: a menu bar with the popover hanging from it */}
         <section
           aria-label="Preview"
-          className="mx-auto max-w-[1024px] px-5 pb-24 pt-10"
+          className="mx-auto  px-5  pt-10 overflow-hidden"
         >
+          {/* MacBook: dark bezel + notch, bottom fades into the page */}
           <div
-            className="reveal relative isolate overflow-hidden rounded-xl shadow-[0_40px_80px_-30px_rgba(0,0,0,0.45)]"
+            className="reveal mx-auto max-w-6xl"
             style={{
               animationDelay: ".35s",
-              clipPath: "inset(0 round 0.75rem)",
             }}
           >
-            <Image
-              src="/bg2.png"
-              alt=""
-              fill
-              priority
-              sizes="(min-width: 1024px) 984px, 100vw"
-              className="-z-10 object-cover"
-            />
-            <MenuBar />
-            <div className="flex justify-center px-5 pb-12 pt-2 sm:justify-end sm:pr-[15%]">
-              <Shot
-                name="panel"
-                alt="The AI-usage detail panel with Codex and Claude Code usage bars"
-                width={600}
-                height={1371}
-                className="w-[300px] rounded-2xl shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]"
-              />
+            <div className="absolute bottom-0 left-0 right-0 fade-blur-overlay-no-color h-24 backdrop-blur-xs z-40"></div>
+            <div className="rounded-t-[1.75rem] bg-gradient-to-b from-[#dfe1e5] via-[#b4b7bd] to-[#8a8d94] p-[3px] pb-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_0_0_0.5px_rgba(0,0,0,0.3)] dark:from-[#7a7d83] dark:via-[#505257] dark:to-[#2c2d31] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
+              <div className="rounded-t-[1.6rem] bg-[#0c0c0e] p-[10px] pb-0 ring-1 ring-black/30 sm:p-4 sm:pb-0">
+                <div
+                  className="relative isolate overflow-hidden rounded-t-[1rem] sm:aspect-[2/1]"
+                  style={{ clipPath: "inset(0 round 1rem 1rem 0 0)" }}
+                >
+                  <Image
+                    src="/bg2.png"
+                    alt=""
+                    fill
+                    priority
+                    sizes="(min-width: 1024px) 936px, 100vw"
+                    className="-z-10 object-cover"
+                  />
+                  <div
+                    aria-hidden
+                    className="absolute left-1/2 top-0 z-20 hidden h-[22px] w-[116px] -translate-x-1/2 items-center justify-center rounded-b-lg bg-[#0c0c0e] md:flex"
+                  >
+                    <span className="size-[7px] rounded-full bg-[#1d1d22] ring-1 ring-white/10" />
+                  </div>
+                  <MenuBar />
+                  <div className="flex justify-center px-5 pb-12 pt-2 sm:justify-end sm:pr-[15%]">
+                    <Shot
+                      name="panel"
+                      alt="The AI-usage detail panel with Codex and Claude Code usage bars"
+                      width={600}
+                      height={1371}
+                      className="w-[250px] rounded-2xl shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
