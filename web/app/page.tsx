@@ -167,18 +167,23 @@ export default function Home() {
                 {
                   name: "OpenAI Codex",
                   icon: RiOpenaiFill,
+                  color: "#10a37f",
                   detail:
                     "Reads session logs and the Codex app-server for rate limits, plan and credits.",
                 },
                 {
                   name: "Claude Code",
                   icon: RiClaudeFill,
+                  color: "#d97757",
                   detail:
                     "Uses your existing Claude Code sign-in to read live limits. No extra login.",
                 },
               ].map((p) => (
                 <div key={p.name} className="rounded-3xl bg-alt p-8">
-                  <span className="mb-5 flex size-11 items-center justify-center rounded-xl bg-fg text-bg">
+                  <span
+                    className="mb-5 flex size-11 items-center justify-center rounded-xl text-white"
+                    style={{ backgroundColor: p.color }}
+                  >
                     <p.icon className="size-6" aria-hidden />
                   </span>
                   <h3 className="text-2xl font-semibold tracking-tight">
