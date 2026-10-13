@@ -13,6 +13,7 @@ import {
   LuSlidersHorizontal,
   LuTimerReset,
 } from "react-icons/lu";
+import { RiClaudeFill, RiOpenaiFill } from "react-icons/ri";
 
 const FEATURES = [
   {
@@ -138,7 +139,7 @@ export default function Home() {
             <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {FEATURES.map((f) => (
                 <article key={f.title} className="rounded-3xl bg-card p-8 ">
-                  <span className="mb-5 flex size-11 items-center justify-center rounded-xl bg-accent/10 text-accent">
+                  <span className="mb-5 flex size-11 items-center justify-center rounded-xl bg-alt text-accent">
                     <f.icon className="size-6" aria-hidden />
                   </span>
                   <h3 className="text-xl font-semibold tracking-tight">
@@ -165,16 +166,21 @@ export default function Home() {
               {[
                 {
                   name: "OpenAI Codex",
+                  icon: RiOpenaiFill,
                   detail:
                     "Reads session logs and the Codex app-server for rate limits, plan and credits.",
                 },
                 {
                   name: "Claude Code",
+                  icon: RiClaudeFill,
                   detail:
                     "Uses your existing Claude Code sign-in to read live limits. No extra login.",
                 },
               ].map((p) => (
                 <div key={p.name} className="rounded-3xl bg-alt p-8">
+                  <span className="mb-5 flex size-11 items-center justify-center rounded-xl bg-fg text-bg">
+                    <p.icon className="size-6" aria-hidden />
+                  </span>
                   <h3 className="text-2xl font-semibold tracking-tight">
                     {p.name}
                   </h3>
