@@ -5,30 +5,44 @@ import { MenuBar } from "@/components/MenuBar";
 import { CopyCommand } from "@/components/CopyCommand";
 import { SITE } from "@/lib/site";
 import Image from "next/image";
+import {
+  LuAppWindowMac,
+  LuCoins,
+  LuGauge,
+  LuShieldCheck,
+  LuSlidersHorizontal,
+  LuTimerReset,
+} from "react-icons/lu";
 
 const FEATURES = [
   {
     title: "Always in view",
+    icon: LuGauge,
     body: "Your 5-hour and weekly usage sit in the menu bar as live percentages. No tab, no terminal, no guessing.",
   },
   {
     title: "Zero tokens spent",
+    icon: LuCoins,
     body: "It never runs a model to ask about itself. Only local telemetry and account metadata the tools already expose.",
   },
   {
     title: "Private by design",
+    icon: LuShieldCheck,
     body: "No analytics, no telemetry, no backend. Prompts and transcripts are never uploaded, logged or stored.",
   },
   {
     title: "Truly native",
+    icon: LuAppWindowMac,
     body: "Pure SwiftUI. Follows light and dark menu bars, stays out of the Dock and sips resources in the background.",
   },
   {
     title: "Make it yours",
+    icon: LuSlidersHorizontal,
     body: "Choose providers, order, icon, values and reset countdowns. Changes apply instantly.",
   },
   {
     title: "Resets at a glance",
+    icon: LuTimerReset,
     body: "See exactly when each window refills, like “resets in 2h 14m at 13:54”, in 24-hour time.",
   },
 ];
@@ -39,7 +53,7 @@ export default function Home() {
       <Nav />
       <main>
         {/* Hero */}
-        <section className="mx-auto max-w-[1024px] px-5 pb-10 pt-32 text-center sm:pt-40">
+        <section className="mx-auto max-w-[1024px] px-5 pb-10 pt-24 text-center ">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/app-icon.png"
@@ -67,7 +81,7 @@ export default function Home() {
             className="reveal mt-9 flex flex-col items-center justify-center gap-1 sm:flex-row sm:gap-4"
             style={{ animationDelay: ".24s" }}
           >
-            <a href={SITE.download} className="btn btn-primary">
+            <a href={SITE.download} className="btn btn-primary ">
               Download for Mac
             </a>
             <a href={SITE.repo} className="btn btn-secondary">
@@ -124,6 +138,9 @@ export default function Home() {
             <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {FEATURES.map((f) => (
                 <article key={f.title} className="rounded-3xl bg-card p-8 ">
+                  <span className="mb-5 flex size-11 items-center justify-center rounded-xl bg-accent/10 text-accent">
+                    <f.icon className="size-6" aria-hidden />
+                  </span>
                   <h3 className="text-xl font-semibold tracking-tight">
                     {f.title}
                   </h3>
@@ -208,7 +225,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t border-line py-8 text-xs text-fg2">
+      <footer className=" py-8 text-xs text-fg2">
         <div className="mx-auto max-w-[1024px] px-5">
           <p className="max-w-[48rem] leading-relaxed">
             AI-usage is an independent project. Not affiliated with or endorsed
@@ -225,9 +242,15 @@ export default function Home() {
               </a>
             </p>
             <nav className="flex gap-5">
-              <a href={SITE.repo} className="hover:text-fg">GitHub</a>
-              <a href={SITE.releases} className="hover:text-fg">Releases</a>
-              <a href={`${SITE.repo}/issues`} className="hover:text-fg">Issues</a>
+              <a href={SITE.repo} className="hover:text-fg">
+                GitHub
+              </a>
+              <a href={SITE.releases} className="hover:text-fg">
+                Releases
+              </a>
+              <a href={`${SITE.repo}/issues`} className="hover:text-fg">
+                Issues
+              </a>
             </nav>
           </div>
         </div>
