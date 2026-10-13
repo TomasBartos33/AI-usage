@@ -1,8 +1,9 @@
 #!/usr/bin/env swift
-// Renders the AI-usage app icon (a usage gauge) into AppIcon.appiconset.
+// Renders the AI-usage app icon from docs/brand/logo.png into AppIcon.appiconset.
 // Usage: swift scripts/make-app-icon.swift
 import AppKit
 
+let logo = NSImage(contentsOfFile: "docs/brand/logo.png")!
 let output = URL(fileURLWithPath: "AIUsage/Resources/Assets.xcassets/AppIcon.appiconset")
 
 func render(pixels: Int) -> Data {
@@ -28,45 +29,11 @@ func render(pixels: Int) -> Data {
     ctx.saveGState()
     ctx.addPath(shape)
     ctx.clip()
-    let background = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: [
-        NSColor(red: 0.16, green: 0.17, blue: 0.24, alpha: 1).cgColor,
-        NSColor(red: 0.06, green: 0.06, blue: 0.10, alpha: 1).cgColor,
-    ] as CFArray, locations: [0, 1])!
-    ctx.drawLinearGradient(background, start: CGPoint(x: 512, y: 924), end: CGPoint(x: 512, y: 100), options: [])
-    ctx.restoreGState()
-
-    // Gauge: 240° arc, track + colored fill to ~70 %.
-    let center = CGPoint(x: 512, y: 470)
-    let radius: CGFloat = 270
-    let start = CGFloat.pi * 1.25, end = -CGFloat.pi * 0.25
-    ctx.setLineCap(.round)
-    ctx.setLineWidth(70)
-    ctx.setStrokeColor(NSColor.white.withAlphaComponent(0.14).cgColor)
-    ctx.addArc(center: center, radius: radius, startAngle: start, endAngle: end, clockwise: true)
-    ctx.strokePath()
-
-    let fillEnd = start - (start - end) * 0.7
-    ctx.saveGState()
-    ctx.addArc(center: center, radius: radius, startAngle: start, endAngle: fillEnd, clockwise: true)
-    ctx.replacePathWithStrokedPath()
-    ctx.clip()
-    let accent = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: [
-        NSColor(red: 0.30, green: 0.85, blue: 0.75, alpha: 1).cgColor,
-        NSColor(red: 0.98, green: 0.62, blue: 0.30, alpha: 1).cgColor,
-    ] as CFArray, locations: [0, 1])!
-    ctx.drawLinearGradient(accent, start: CGPoint(x: 200, y: 300), end: CGPoint(x: 800, y: 600), options: [])
-    ctx.restoreGState()
-
-    // Needle and hub.
-    let needleAngle = fillEnd
-    let tip = CGPoint(x: center.x + cos(needleAngle) * (radius - 70), y: center.y + sin(needleAngle) * (radius - 70))
-    ctx.setStrokeColor(NSColor.white.cgColor)
-    ctx.setLineWidth(30)
-    ctx.move(to: center)
-    ctx.addLine(to: tip)
-    ctx.strokePath()
+    // White tile with the brand mark (docs/brand/logo.png, drawn oversized so the mark fills the tile).
     ctx.setFillColor(NSColor.white.cgColor)
-    ctx.fillEllipse(in: CGRect(x: center.x - 48, y: center.y - 48, width: 96, height: 96))
+    ctx.fill(body)
+    logo.draw(in: CGRect(x: 512 - 470, y: 512 - 470, width: 940, height: 940), from: .zero, operation: .sourceOver, fraction: 1)
+    ctx.restoreGState()
 
     NSGraphicsContext.restoreGraphicsState()
     return rep.representation(using: .png, properties: [:])!
