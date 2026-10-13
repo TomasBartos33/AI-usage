@@ -62,7 +62,7 @@ export default function Home() {
             alt="AI-usage app icon"
             width={112}
             height={112}
-            className="reveal mx-auto rounded-[26px]"
+            className="reveal mx-auto rounded-[26px] border border-line shadow-2xl"
           />
           <h1
             className="reveal mx-auto mt-8 text-[2.75rem] font-bold leading-[0.9] tracking-tight sm:text-7xl"
