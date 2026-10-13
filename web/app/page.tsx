@@ -207,33 +207,29 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t border-line py-10 text-xs text-fg2">
-        <div className="mx-auto flex max-w-[1024px] flex-col gap-3 px-5 sm:flex-row sm:items-center sm:justify-between">
-          <p>
+      <footer className="border-t border-line py-8 text-xs text-fg2">
+        <div className="mx-auto max-w-[1024px] px-5">
+          <p className="max-w-[48rem] leading-relaxed">
             AI-usage is an independent project. Not affiliated with or endorsed
             by OpenAI or Anthropic. All trademarks belong to their owners.
           </p>
-          <nav className="flex gap-5">
-            <a href={SITE.repo} className="hover:text-fg">
-              GitHub
-            </a>
-            <a href={SITE.releases} className="hover:text-fg">
-              Releases
-            </a>
-            <a href={`${SITE.repo}/issues`} className="hover:text-fg">
-              Issues
-            </a>
-          </nav>
+          <div className="mt-6 flex flex-col gap-3 border-t border-line pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <p>
+              Made by{" "}
+              <a
+                href="https://tmscode.sk"
+                className="font-medium text-fg hover:underline"
+              >
+                tmscode
+              </a>
+            </p>
+            <nav className="flex gap-5">
+              <a href={SITE.repo} className="hover:text-fg">GitHub</a>
+              <a href={SITE.releases} className="hover:text-fg">Releases</a>
+              <a href={`${SITE.repo}/issues`} className="hover:text-fg">Issues</a>
+            </nav>
+          </div>
         </div>
-        <p className="mx-auto mt-6 max-w-[1024px] px-5 text-center">
-          Made by{" "}
-          <a
-            href="https://tmscode.sk"
-            className="font-medium text-fg hover:underline"
-          >
-            tmscode
-          </a>
-        </p>
       </footer>
     </>
   );
