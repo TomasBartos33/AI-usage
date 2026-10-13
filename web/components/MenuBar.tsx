@@ -23,17 +23,17 @@ export function MenuBar() {
   }, []);
 
   return (
-    <div className="flex h-8 items-center justify-between bg-white/25 px-4 text-[13px] font-medium text-white backdrop-blur-xl dark:bg-black/25">
+    <div className="flex h-8 items-center justify-between bg-white/25 px-4 text-[13px] font-medium text-white dark:bg-black/25">
       <FaApple className="size-[15px]" aria-label="Apple" />
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-3 tabular-nums" aria-label="AI-usage: OpenAI Codex 72%, Claude Code 41%">
           <span className="flex items-center gap-1.5">
             <RiOpenaiFill className="size-[15px]" aria-hidden />
-            72
+            72%
           </span>
           <span className="flex items-center gap-1.5 opacity-50">
             <RiClaudeFill className="size-[15px]" aria-hidden />
-            41
+            41%
           </span>
         </div>
         <time className="min-w-[10.5rem] text-right tabular-nums" suppressHydrationWarning>{now || " "}</time>
