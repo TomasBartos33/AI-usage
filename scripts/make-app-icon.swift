@@ -16,11 +16,10 @@ func render(pixels: Int) -> Data {
     let s = CGFloat(pixels) / 1024
     ctx.scaleBy(x: s, y: s)
 
-    // macOS icon grid: 824pt rounded square centered in 1024, with a soft shadow.
+    // macOS icon grid: 824pt rounded square centered in 1024. Flat: no baked-in shadow.
     let body = CGRect(x: 100, y: 100, width: 824, height: 824)
     let shape = CGPath(roundedRect: body, cornerWidth: 185, cornerHeight: 185, transform: nil)
     ctx.saveGState()
-    ctx.setShadow(offset: CGSize(width: 0, height: -10), blur: 24, color: NSColor.black.withAlphaComponent(0.35).cgColor)
     ctx.addPath(shape)
     ctx.setFillColor(NSColor.black.cgColor)
     ctx.fillPath()
