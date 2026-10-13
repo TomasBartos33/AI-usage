@@ -86,7 +86,7 @@ export default function Home() {
           className="mx-auto max-w-[1024px] px-5 pb-24 pt-10"
         >
           <div
-            className="reveal overflow-hidden rounded-[2rem] bg-gradient-to-b from-[#7aa7ff] via-[#a78bfa] to-[#f0abfc] shadow-[0_40px_80px_-30px_rgba(0,0,0,0.45)] dark:from-[#1d3a8a] dark:via-[#4c1d95] dark:to-[#831843]"
+            className="reveal overflow-hidden rounded-xl bg-gradient-to-b from-[#7aa7ff] via-[#a78bfa] to-[#f0abfc] shadow-[0_40px_80px_-30px_rgba(0,0,0,0.45)] dark:from-[#1d3a8a] dark:via-[#4c1d95] dark:to-[#831843]"
             style={{ animationDelay: ".35s" }}
           >
             <MenuBar />
@@ -96,7 +96,7 @@ export default function Home() {
                 alt="The AI-usage detail panel with Codex and Claude Code usage bars"
                 width={600}
                 height={1371}
-                className="w-[300px] rounded-[14px] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]"
+                className="w-[300px] rounded-[10px] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]"
               />
             </div>
           </div>
