@@ -2,7 +2,7 @@ import Foundation
 
 /// How a provider is identified in the menu bar.
 enum IconStyle: String, Codable, CaseIterable, Sendable, Identifiable {
-    case logo         // provider logo, loaded from the provider's installed app
+    case logo         // provider logo from the installed app, else the provider name
     case sparkle      // generic SF Symbol sparkle
     case symbol       // provider specific SF Symbol placeholder
     case glyph        // unicode glyph (✦, ◈)

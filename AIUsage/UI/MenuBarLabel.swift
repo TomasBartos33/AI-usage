@@ -86,8 +86,8 @@ private struct MenuBarContent: View {
                         .interpolation(.high)
                         .frame(width: 15, height: 15)
                 } else {
-                    Image(systemName: ProviderBranding.of(provider).symbolName)
-                        .font(.system(size: 12, weight: .semibold))
+                    // Provider's app is not installed: fall back to the plain name.
+                    Text(ProviderBranding.of(provider).shortName)
                 }
             case .symbol(let name):
                 Image(systemName: name)

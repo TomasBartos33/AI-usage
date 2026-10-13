@@ -2,7 +2,7 @@ import AppKit
 
 /// Loads provider logos from the provider's own installed desktop app (e.g.
 /// ChatGPT.app's and Claude.app's menu bar template icons). Nothing is bundled
-/// with AI-usage; if the app is not installed the caller falls back to a symbol.
+/// with AI-usage; if the app is not installed the caller falls back to the provider's name.
 @MainActor
 enum ProviderLogo {
     private static var cache: [ProviderID: NSImage?] = [:]

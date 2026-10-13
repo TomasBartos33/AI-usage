@@ -9,6 +9,20 @@ A lightweight, native macOS menu bar app that shows how much of your AI coding-t
 > **AI-usage never consumes AI/model tokens to obtain usage information.**
 > It does not run `codex exec`, `claude -p`, call the OpenAI Responses API or the Anthropic Messages API, or ask any model about its own usage. It only reads telemetry and account metadata that the tools already expose locally. If a metric cannot be obtained without inference, it is not shown.
 
+## Download and install
+
+Requires macOS 14 or later (Apple silicon and Intel).
+
+1. Download `AI-usage-macOS.zip` from the [latest release](https://github.com/TomasBartos33/AI-usage/releases/latest) and unzip it.
+2. Move `AI-usage.app` to `/Applications`.
+3. Remove the quarantine flag, then open the app:
+
+   ```bash
+   xattr -dr com.apple.quarantine /Applications/AI-usage.app
+   ```
+
+The app is ad-hoc signed and **not notarized** (notarization needs a paid Apple Developer account), so macOS blocks a plain double-click with a "cannot be opened" or "damaged" warning. Step 3 clears that once. Alternatively, try opening the app, then go to *System Settings → Privacy & Security* and click *Open Anyway*. If you would rather not run an unsigned binary, [build it from source](#development).
+
 ## Screenshots
 
 Rendered with deterministic demo data (`--demo`). The menu bar previews use the
@@ -81,11 +95,11 @@ Measured on an M-series Mac: ~0 % CPU when idle, ~25–35 MB memory footprint.
 
 ## Menu bar configuration
 
-Per provider (*Settings → Menu Bar*): show/hide, order, content (icon + usage, usage only, icon only), icon (provider logo, sparkle, provider symbol, glyph ✦/◈, name, none), primary and optional secondary value (5 hour, weekly, highest), used vs remaining, percent sign, window label (`5h 72%`), reset countdown (`72% 2h14m`). Changes apply immediately. The menu bar title is rendered as a template image, so it follows light/dark menu bars; official logos are not bundled: the default *Logo* style loads the monochrome menu bar template icons that ChatGPT.app (`chatgptTemplate`) and Claude.app (`TrayIconTemplate`) ship, at runtime, and falls back to an SF Symbol when the app is not installed.
+Per provider (*Settings → Menu Bar*): show/hide, order, content (icon + usage, usage only, icon only), icon (provider logo, sparkle, provider symbol, glyph ✦/◈, name, none), primary and optional secondary value (5 hour, weekly, highest), used vs remaining, percent sign, window label (`5h 72%`), reset countdown (`72% 2h14m`). Changes apply immediately. The menu bar title is rendered as a template image, so it follows light/dark menu bars; official logos are not bundled: the default *Logo* style loads the monochrome menu bar template icons that ChatGPT.app (`chatgptTemplate`) and Claude.app (`TrayIconTemplate`) ship, at runtime, and falls back to the plain provider name (`Codex`, `Claude`) when the app is not installed.
 
 ## Privacy
 
-- Everything stays on your Mac. No analytics, no telemetry, no backend, no network requests of its own. (The Codex CLI's `app-server`, when AI-usage starts it, talks to OpenAI the way Codex normally does — e.g. to answer `account/rateLimits/read`, the same request Codex's own UI makes to show your limits. AI-usage itself makes no network requests.)
+- Everything stays on your Mac. No analytics, no telemetry, no backend. The only network request AI-usage makes itself is the Claude usage lookup: a read-only `GET` to Anthropic's usage endpoint (`api.anthropic.com/api/oauth/usage`) with Claude Code's existing sign-in, the same data Claude Code's own `/usage` shows. It does not call any model. The Codex CLI's `app-server`, when AI-usage starts it, talks to OpenAI the way Codex normally does — e.g. to answer `account/rateLimits/read`, the same request Codex's own UI makes to show your limits.
 - Transcripts and prompts are never uploaded, logged or persisted. Parsers extract numeric counters, model names, timestamps and working directories only.
 - AI-usage persists only normalized metrics (`~/Library/Application Support/AI-usage/snapshots.json`) and preferences (`UserDefaults`). No credentials are stored. The only credential read is Claude Code's access token for the optional live usage request (in memory, per request).
 
