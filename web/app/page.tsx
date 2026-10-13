@@ -70,7 +70,7 @@ export default function Home() {
               Download for Mac
             </a>
             <a href={SITE.repo} className="btn btn-secondary">
-              View on GitHub <span aria-hidden>›</span>
+              View on GitHub
             </a>
           </div>
           <p
@@ -88,17 +88,27 @@ export default function Home() {
         >
           <div
             className="reveal relative isolate overflow-hidden rounded-xl shadow-[0_40px_80px_-30px_rgba(0,0,0,0.45)]"
-            style={{ animationDelay: ".35s", clipPath: "inset(0 round 0.75rem)" }}
+            style={{
+              animationDelay: ".35s",
+              clipPath: "inset(0 round 0.75rem)",
+            }}
           >
-            <Image src="/bg.jpg" alt="" fill priority sizes="(min-width: 1024px) 984px, 100vw" className="-z-10 object-cover" />
+            <Image
+              src="/bg2.png"
+              alt=""
+              fill
+              priority
+              sizes="(min-width: 1024px) 984px, 100vw"
+              className="-z-10 object-cover"
+            />
             <MenuBar />
-            <div className="flex justify-center px-5 pb-12 pt-6 sm:justify-end sm:pr-[12%]">
+            <div className="flex justify-center px-5 pb-12 pt-2 sm:justify-end sm:pr-[15%]">
               <Shot
                 name="panel"
                 alt="The AI-usage detail panel with Codex and Claude Code usage bars"
                 width={600}
                 height={1371}
-                className="w-[300px] rounded-[10px] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]"
+                className="w-[300px] rounded-2xl shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]"
               />
             </div>
           </div>
@@ -215,6 +225,15 @@ export default function Home() {
             </a>
           </nav>
         </div>
+        <p className="mx-auto mt-6 max-w-[1024px] px-5 text-center">
+          Made by{" "}
+          <a
+            href="https://tmscode.sk"
+            className="font-medium text-fg hover:underline"
+          >
+            tmscode
+          </a>
+        </p>
       </footer>
     </>
   );

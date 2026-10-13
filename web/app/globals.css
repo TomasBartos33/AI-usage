@@ -4,6 +4,7 @@
 :root {
   --bg: #ffffff;
   --bg-alt: #f5f5f7;
+  --bg-alt-hover: #e5e5e7;
   --card: #ffffff;
   --text: #1d1d1f;
   --text-2: #6e6e73;
@@ -100,7 +101,7 @@ body {
   font-size: 1.0625rem;
 }
 .btn-secondary:hover {
-  text-decoration: underline;
+  background-color: var(--bg-alt-hover);
 }
 .btn-gray {
   background: var(--bg-alt);
@@ -110,7 +111,7 @@ body {
   border: 0.5px solid var(--line);
 }
 .btn-gray:hover {
-  opacity: 0.8;
+  background: var(--bg-alt-hover);
 }
 :focus-visible {
   outline: 2px solid var(--blue);
