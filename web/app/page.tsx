@@ -1,5 +1,6 @@
 import { Nav } from "@/components/Nav";
 import { Shot } from "@/components/Shot";
+import { Year } from "@/components/Year";
 import { MenuBar } from "@/components/MenuBar";
 import { CopyCommand } from "@/components/CopyCommand";
 import { SITE } from "@/lib/site";
@@ -215,7 +216,7 @@ export default function Home() {
           </p>
           <div className="mt-6 flex flex-col gap-3 border-t border-line pt-5 sm:flex-row sm:items-center sm:justify-between">
             <p>
-              Made by{" "}
+              &copy; <Year /> tmscode. Made by{" "}
               <a
                 href="https://tmscode.sk"
                 className="font-medium text-fg hover:underline"
