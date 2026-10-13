@@ -131,6 +131,15 @@ Useful flags (Debug builds):
 - `--export-snapshots <dir>` — render the menu bar title and panel to PNGs, print the snapshots and quit (verification without screen recording permission)
 - `AI_USAGE_HOME=<dir>` environment variable — pretend the home directory is `<dir>` (test missing / empty provider states)
 
+### Website
+
+The landing page lives in `web/` (Next.js static export + Tailwind). Its download button always points at the newest GitHub release, so it needs no changes when you publish a new version.
+
+```bash
+cd web && npm install && npm run dev      # http://localhost:3000
+cd web && npm run build                   # static site in web/out, deployable anywhere
+```
+
 ### Project layout
 
 ```

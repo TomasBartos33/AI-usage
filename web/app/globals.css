@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+/* Apple-style tokens. Light by default, dark follows the system. */
+:root {
+  --bg: #ffffff;
+  --bg-alt: #f5f5f7;
+  --card: #ffffff;
+  --text: #1d1d1f;
+  --text-2: #6e6e73;
+  --line: rgba(0, 0, 0, 0.1);
+  --blue: #0071e3;
+  --blue-hover: #0077ed;
+  --nav: rgba(255, 255, 255, 0.72);
+  --shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.25), 0 0 0 0.5px rgba(0, 0, 0, 0.1);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000000;
+    --bg-alt: #161617;
+    --card: #1d1d1f;
+    --text: #f5f5f7;
+    --text-2: #a1a1a6;
+    --line: rgba(255, 255, 255, 0.14);
+    --blue: #2997ff;
+    --blue-hover: #4aa8ff;
+    --nav: rgba(22, 22, 23, 0.72);
+    --shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8), 0 0 0 0.5px rgba(255, 255, 255, 0.14);
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-alt: var(--bg-alt);
+  --color-card: var(--card);
+  --color-fg: var(--text);
+  --color-fg2: var(--text-2);
+  --color-line: var(--line);
+  --color-accent: var(--blue);
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.011em;
+}
+::selection { background: color-mix(in srgb, var(--blue) 30%, transparent); }
+
+/* macOS-style buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+  border-radius: 9999px; font-weight: 500; line-height: 1;
+  transition: background-color .2s, transform .15s, opacity .2s;
+  cursor: pointer; user-select: none; white-space: nowrap;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--blue); color: #fff; padding: 0.95rem 1.7rem; font-size: 1.0625rem; }
+.btn-primary:hover { background: var(--blue-hover); }
+.btn-sm { padding: 0.4rem 0.85rem; font-size: 0.75rem; }
+.btn-secondary { color: var(--blue); padding: 0.95rem 0.5rem; font-size: 1.0625rem; }
+.btn-secondary:hover { text-decoration: underline; }
+.btn-gray { background: var(--bg-alt); color: var(--text); padding: 0.55rem 1rem; font-size: 0.8125rem; border: 0.5px solid var(--line); }
+.btn-gray:hover { opacity: 0.8; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 9999px; }
+
+.reveal { animation: rise .9s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .reveal { animation: none; } html { scroll-behavior: auto; } }
