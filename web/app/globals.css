@@ -11,7 +11,7 @@
   --line: rgba(0, 0, 0, 0.1);
   --blue: #0071e3;
   --blue-hover: #0077ed;
-  --nav: rgba(255, 255, 255, 0.72);
+  --nav: rgba(245, 245, 247, 0.7);
   --shadow:
     0 30px 60px -20px rgba(0, 0, 0, 0.25), 0 0 0 0.5px rgba(0, 0, 0, 0.1);
 }

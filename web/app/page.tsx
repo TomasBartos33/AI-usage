@@ -61,10 +61,10 @@ export default function Home() {
             alt="AI-usage app icon"
             width={112}
             height={112}
-            className="reveal mx-auto rounded-[26px] shadow-[0_20px_40px_-12px_rgba(0,0,0,0.35)]"
+            className="reveal mx-auto rounded-[26px] drop-shadow-2xl"
           />
           <h1
-            className="reveal mx-auto mt-8 text-[2.75rem] font-semibold leading-[1.05] tracking-[-0.03em] sm:text-7xl"
+            className="reveal mx-auto mt-8 text-[2.75rem] font-bold leading-[0.9] tracking-tight sm:text-7xl"
             style={{ animationDelay: ".08s" }}
           >
             Your AI limits.
@@ -244,9 +244,10 @@ export default function Home() {
           </p>
           <div className="mt-6 flex flex-col gap-3 border-t border-line pt-5 sm:flex-row sm:items-center sm:justify-between">
             <p>
-              &copy; <Year /> tmscode. Made by{" "}
+              &copy; <Year /> Made by{" "}
               <a
                 href="https://tmscode.sk"
+                target="_blank"
                 className="font-medium text-fg hover:underline"
               >
                 tmscode
