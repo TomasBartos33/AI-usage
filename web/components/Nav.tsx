@@ -3,7 +3,7 @@ import { SITE } from "@/lib/site";
 export function Nav() {
   return (
     <header
-      className="fixed inset-x-0 top-0 z-50 border-b border-line backdrop-blur-lg backdrop-saturate-150"
+      className="fixed inset-x-0 top-0 z-50 backdrop-blur-lg backdrop-saturate-150"
       style={{ background: "var(--nav)" }}
     >
       <nav className="mx-auto flex h-12 max-w-[1024px] items-center justify-between px-5 text-xs">

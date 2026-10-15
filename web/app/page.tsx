@@ -34,7 +34,7 @@ const FEATURES = [
   {
     title: "Truly native",
     icon: LuAppWindowMac,
-    body: "Pure SwiftUI. Follows light and dark menu bars, stays out of the Dock and sips resources in the background.",
+    body: "Pure SwiftUI. Stays out of the Dock and sips resources in the background.",
   },
   {
     title: "Make it yours",
@@ -109,7 +109,7 @@ export default function Home() {
               animationDelay: ".35s",
             }}
           >
-            <div className="rounded-t-[1.75rem] bg-gradient-to-b from-[#dfe1e5] via-[#b4b7bd] to-[#8a8d94] p-[3px] pb-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_0_0_0.5px_rgba(0,0,0,0.3)] dark:from-[#7a7d83] dark:via-[#505257] dark:to-[#2c2d31] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
+            <div className="rounded-t-[1.75rem] bg-gradient-to-b from-[#dfe1e5] via-[#b4b7bd] to-[#8a8d94] p-[3px] pb-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_0_0_0.5px_rgba(0,0,0,0.3)]">
               <div className="rounded-t-[1.6rem] bg-[#0c0c0e] p-[10px] pb-0 ring-1 ring-black/30 sm:p-4 sm:pb-0">
                 <div
                   className="relative isolate overflow-hidden rounded-t-[1rem] sm:aspect-[2/1]"
