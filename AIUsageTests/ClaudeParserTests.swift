@@ -186,6 +186,31 @@ final class ClaudeParserTests: XCTestCase {
         XCTAssertThrowsError(try ClaudeUsageAPI.accessToken(fromCredentials: Data("{}".utf8), now: now))
     }
 
+    func testTokenRefresh() throws {
+        let now = Date(timeIntervalSince1970: 1_800_000_000)
+        let stored = #"{"claudeAiOauth":{"accessToken":"old","refreshToken":"r1","expiresAt":1799999000000,"refreshTokenExpiresAt":1801000000000,"scopes":["user:inference","user:profile"],"subscriptionType":"pro"}}"#
+        let body = try XCTUnwrap(ClaudeUsageAPI.refreshRequestBody(fromCredentials: Data(stored.utf8), now: now))
+        XCTAssertEqual(body["grant_type"] as? String, "refresh_token")
+        XCTAssertEqual(body["refresh_token"] as? String, "r1")
+        XCTAssertEqual(body["client_id"] as? String, ClaudeUsageAPI.clientID)
+        XCTAssertEqual(body["scope"] as? String, "user:inference user:profile")
+
+        let deadRefresh = #"{"claudeAiOauth":{"accessToken":"old","refreshToken":"r1","refreshTokenExpiresAt":1799999000000}}"#
+        XCTAssertNil(ClaudeUsageAPI.refreshRequestBody(fromCredentials: Data(deadRefresh.utf8), now: now))
+        XCTAssertNil(ClaudeUsageAPI.refreshRequestBody(fromCredentials: Data(#"{"claudeAiOauth":{"accessToken":"old"}}"#.utf8), now: now))
+
+        let response: [String: Any] = ["access_token": "new", "refresh_token": "r2", "expires_in": 3600]
+        let updated = try XCTUnwrap(ClaudeUsageAPI.refreshedCredentials(Data(stored.utf8), response: response, now: now))
+        XCTAssertEqual(try ClaudeUsageAPI.accessToken(fromCredentials: updated, now: now), "new")
+        let oauth = try XCTUnwrap(LooseJSON.object(updated).flatMap { LooseJSON.dict($0["claudeAiOauth"]) })
+        XCTAssertEqual(LooseJSON.string(oauth["refreshToken"]), "r2")
+        XCTAssertEqual(LooseJSON.double(oauth["expiresAt"]), 1_800_003_600_000)
+        XCTAssertEqual(LooseJSON.double(oauth["refreshTokenExpiresAt"]), 1_801_000_000_000)
+        XCTAssertEqual(LooseJSON.string(oauth["subscriptionType"]), "pro")
+        XCTAssertEqual(oauth["scopes"] as? [String], ["user:inference", "user:profile"])
+        XCTAssertNil(ClaudeUsageAPI.refreshedCredentials(Data(stored.utf8), response: ["expires_in": 3600], now: now))
+    }
+
     func testUsageEndpointResponse() throws {
         let json = #"{"five_hour":{"utilization":75.0,"resets_at":"2026-10-03T14:00:00.312422+00:00"},"seven_day":{"utilization":16.0,"resets_at":"2026-10-06T02:00:00.312449+00:00"},"seven_day_opus":null}"#
         let windows = ClaudeParsers.windows(fromUtilization: try XCTUnwrap(LooseJSON.object(Data(json.utf8))))

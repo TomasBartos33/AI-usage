@@ -108,7 +108,7 @@ private struct ClaudeSettingsSection: View {
             ProviderStatusRows(snapshot: store.snapshots[.claude], now: store.now)
             Toggle("Fetch live usage from Anthropic", isOn: $preferences.claudeLiveUsage)
                 .onChange(of: preferences.claudeLiveUsage) { _, _ in store.configureProviders() }
-            Text("Asks Anthropic's usage endpoint (the one behind Claude Code's /usage) using Claude Code's sign-in. Counters only, no tokens used; the sign-in token is read from the Keychain for each request and never stored.")
+            Text("Asks Anthropic's usage endpoint (the one behind Claude Code's /usage) using Claude Code's sign-in. Counters only, no tokens used; the sign-in token is read from the Keychain for each request. An expired token is renewed as Claude Code does it and written back to Claude Code's Keychain item.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
             LabeledContent("Status line bridge") {
